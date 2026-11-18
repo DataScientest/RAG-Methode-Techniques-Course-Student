@@ -4,7 +4,8 @@ Ce dépôt accompagne le module « RAG — méthode et techniques ». Vous const
 
 ## Les branches
 
-Chaque branche `chapter-N` contient le projet tel qu'il est à la fin du chapitre N :
+- `main` : ce README seul. Le chapitre 1 part d'un dossier vide.
+- `chapter-N` : le projet tel qu'il est à la fin du chapitre N.
 
 | Branche | Fin du chapitre |
 |---|---|
@@ -18,14 +19,26 @@ Elles servent à reprendre le module à un chapitre donné, ou à comparer votre
 
 ## Reprendre à un chapitre
 
-Pour commencer le chapitre N avec la correction du chapitre N−1 :
+Pour commencer le chapitre N, partez de la branche `chapter-(N−1)`. Exemple pour le chapitre 3 :
 
 ```bash
 git clone -b chapter-2 https://github.com/DataScientest/RAG-Methode-Techniques-Course-Student.git rag-methode
 cd rag-methode
 uv sync
+cp .env.example .env
 ```
 
-Créez ensuite `.env` avec les deux valeurs de la gateway du cours (`LLM_BASE_URL`, `LLM_API_KEY`), puis suivez l'encadré « Pour reprendre ici » du chapitre : il donne les commandes qui régénèrent le corpus et l'index.
+Dans `.env`, remplacez les deux `remplacez-moi` par les valeurs de la gateway données par votre formateur.
+
+Les fiches et le corpus ne sont pas dans Git. Téléchargez les fiches (exercice 1.4), puis reconstruisez le corpus :
+
+```bash
+mkdir -p data/raw
+curl -L -o data/raw/vosdroits-latest.zip https://lecomarquage.service-public.gouv.fr/vdd/3.5/part/zip/vosdroits-latest.zip
+unzip -q -o data/raw/vosdroits-latest.zip -d data/raw/xml
+uv run python -m src.corpus
+```
+
+L'encadré « Pour reprendre ici » du chapitre donne ensuite la commande qui reconstruit l'index.
 
 Le fichier `.env` est un secret : il n'est jamais suivi par Git.
